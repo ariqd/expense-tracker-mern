@@ -1,13 +1,32 @@
-import React, { useState } from "react";
+import { useState, useContext } from "react";
+import NumberFormat from "react-number-format";
+import { GlobalContext } from "../Context/GlobalState";
 
 const AddTransaction = () => {
+  const { addTransaction } = useContext(GlobalContext);
+
   const [text, setText] = useState("");
   const [amount, setAmount] = useState(0);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    const newTransaction = {
+      id: Math.floor(Math.random() * 100000000),
+      text,
+      amount: +amount,
+    };
+
+    addTransaction(newTransaction);
+
+    setText("");
+    setAmount(0);
+  };
 
   return (
     <>
       <h3>Add New Transaction</h3>
-      <form action="">
+      <form onSubmit={onSubmit}>
         <div className="form-control">
           <label htmlFor="text">Text</label>
           <input
@@ -30,6 +49,9 @@ const AddTransaction = () => {
             onChange={(e) => setAmount(e.target.value)}
           />
         </div>
+        <button className="btn" type="submit">
+          Add Transaction
+        </button>
       </form>
     </>
   );
